@@ -88,6 +88,10 @@ The keybindings for the completions are as follows:
 
 Keybinds can be customized by modifying the `$HOME/.config/fish/functions/based_user_key_bindings.fish` file.
 
+## Demonstration
+
+![based.fish demonstration](assets/based_fish_plugin.gif)
+
 ## Contributing
 
 If you want to contribute to based.fish, feel free to open issues or pull requests on the GitHub repository. Contributions are welcome!
