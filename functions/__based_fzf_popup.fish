@@ -1,8 +1,7 @@
 function __based_fzf_popup
     set -l suggestions (__based)
     if test (count $suggestions) -gt 0
-        # Run fzf and capture exit status
-        set -l chosen (printf "%s\n" $suggestions | fzf --height 40% --reverse --prompt='Context > ' --query="$prefix" --no-sort --exact)
+        set -l chosen (printf "%s\n" $suggestions | fzf --height 40% --reverse --prompt='Context > ' --query="$prefix" --no-sort --exact --border)
 
         if test -n "$chosen"
             set -l cleaned (string trim -- $chosen)
