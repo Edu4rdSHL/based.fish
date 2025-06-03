@@ -10,6 +10,26 @@ based.fish is a lightweight Fish plugin that provides context-based autocompleti
 - Support for importing existing Fish history.
 - Customizable configuration options to tailor the behavior of the plugin.
 - Directory-aware completions that take into account the current working directory.
+- Statistics about command usage, such as most frequently used commands, options, and arguments.
+- Customizable keybindings for navigating and selecting completions.
+- Support for disabling fuzzy matching and confirmation prompts.
+
+## How it works
+
+based.fish uses a SQLite database to store command history and statistics. It analyzes the command history to provide context-aware suggestions based on the current command line input or simply based on the current working directory. The logic is as follows:
+
+- It tracks the frequency of commands, options, and arguments used in the past.
+- It tracks the working directory where the commands were executed.
+- Smart suggestions are created with that information.
+- fzf is used for fuzzy matching and selection of completions.
+- It provides a user-friendly interface for navigating and selecting completions.
+
+### Suggestions algorithm
+
+- It considers the date of the last use, the frequency of use, and the context of the current command line input. Suggestions are made based on this information.
+- If you are in a directory where you have previously used a command multiple times, it will suggest that command first, then the second most used command, and so on.
+- For convenience, during the current session, it will always suggest your previous command first and then go back to the most used commands in the current directory.
+
 
 ## Installation
 
@@ -59,6 +79,14 @@ E.g. to disable fuzzy behavior when searching for completions
 ```fish
 $ set -Ux BASED_NO_FUZZY 1
 ```
+
+The keybindings for the completions are as follows:
+
+- `Arrow Up` and `Arrow Down`: Navigate through the suggestions of the smart history.
+- `Enter`: Accept the selected suggestion.
+- `Ctrl + C`: Cancel the completion and return to the command line.
+
+Keybinds can be customized by modifying the `$HOME/.config/fish/functions/based_user_key_bindings.fish` file.
 
 ## Contributing
 
