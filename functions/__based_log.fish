@@ -16,7 +16,7 @@ function __based_log --on-event fish_preexec
     set cmd (string replace -a "'" "''" -- $cmd)
     set path (string replace -a "'" "''" -- $path)
 
-    sqlite3 $db "
+    sqlite3 -batch $db "
         INSERT INTO log (path, cmd, counter, ts)
         VALUES ('$path', '$cmd', 1, $ts)
         ON CONFLICT(path, cmd) DO UPDATE SET
