@@ -40,6 +40,13 @@ $ based import
 ```
 This will read your existing Fish history and populate the based.fish database with it.
 
+Additionally, you can see the stats of your command usage with:
+
+```fish
+$ based stats
+```
+This will display statistics about your command usage, such as the most frequently used commands, options, and arguments.
+
 ## Configuration
 
 You can customize the behavior of based.fish by setting environment variables in your Fish shell:
