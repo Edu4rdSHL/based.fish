@@ -2,6 +2,9 @@
 
 based.fish is a lightweight Fish plugin that provides context-based autocompletion for commands, options, and arguments. It enhances the default Fish shell completion system by offering more intelligent and context-aware suggestions. For example, it suggests commands based on the frequency of use, date of use, and the context of the current command line such as the path where you are, the command you are typing, etc.
 
+
+**Important:** this project was mainly born because I wrongly thought that [atuin](https://atuin.sh/) didn't offered per-directory completions, but it actually does. So, if you are looking for a more complete solution that also includes history management, I recommend checking out [atuin](https://atuin.sh/). However, if you are looking for a lightweight and simple solution that purely focuses on context-based autocompletion, this plugin is a great choice.
+
 ## Features
 
 - Context-aware autocompletion for commands, options, and arguments.
