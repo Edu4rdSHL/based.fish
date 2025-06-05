@@ -1,18 +1,16 @@
 # A context-based autocompletion plugin for the Fish shell
 
-based.fish is a lightweight Fish plugin that provides context-based autocompletion for commands, options, and arguments. It enhances the default Fish shell completion system by offering more intelligent and context-aware suggestions. For example, it suggests commands based on the frequency of use, date of use, and the context of the current command line such as the path where you are, the command you are typing, etc.
-
-
-**Important:** this project was mainly born because I wrongly thought that [atuin](https://atuin.sh/) didn't offered per-directory completions, but it actually does. So, if you are looking for a more complete solution that also includes history management, I recommend checking out [atuin](https://atuin.sh/). However, if you are looking for a lightweight and simple solution that purely focuses on context-based autocompletion, this plugin is a great choice.
+based.fish is a lightweight Fish plugin that provides context-based autocompletion for commands, options, and arguments. It enhances the default Fish shell completion system by offering more intelligent and context-aware suggestions. For example, it suggests commands based on the frequency of use, date of use, and the context of the current command line such as the path where you are, the command you are typing, etc. See the [other tools](#other-tools) section for a comparison with similar tools.
 
 ## Features
 
 - Context-aware autocompletion for commands, options, and arguments.
+- Supports combining different history sources, such as the current working directory, the global suggestions, and the previous command.
+- Directory-aware completions that take into account the current working directory.
 - Integration with fzf for a better selection experience.
 - Easy installation and setup with Fisher.
 - Support for importing existing Fish history.
 - Customizable configuration options to tailor the behavior of the plugin.
-- Directory-aware completions that take into account the current working directory.
 - Statistics about command usage, such as most frequently used commands, options, and arguments.
 - Customizable keybindings for navigating and selecting completions.
 - Support for disabling fuzzy matching and confirmation prompts.
@@ -31,7 +29,7 @@ based.fish uses a SQLite database to store command history and statistics. It an
 
 - It considers the date of the last use, the frequency of use, and the context of the current command line input. Suggestions are made based on this information.
 - If you are in a directory where you have previously used a command multiple times, it will suggest that command first, then the second most used command, and so on.
-- For convenience, during the current session, it will always suggest your previous command first and then go back to the most used commands in the current directory.
+- For convenience, during the current session, it will always suggest your previous command first and then append the most used commands in the current directory, and then then global ones. It's to replicate the "normal" behavior of most shells.
 
 
 ## Installation
@@ -94,6 +92,10 @@ Keybinds can be customized by modifying the `$HOME/.config/fish/functions/based_
 ## Demonstration
 
 ![based.fish demonstration](assets/based_fish_plugin.gif)
+
+### Other tools
+
+- [Atuin](https://github.com/atuinsh/atuin): a very well-known. It's a great tool, but doesn't provide what I wanted, it basically shows you the most recent commands, it does provide per-directory completions, but it's very limited. Commands are always shown in the recent order, not per-directory repeats (unless you type something or set the "directory" filter, but then that limits the history to that directory only), and even with the filters, these filters works separately and you have to switch between them for history, they can't be combined and it's unlikely to happen https://github.com/atuinsh/atuin/issues/1611#issuecomment-1908451910, this is a dealbreaker **for me**. I discovered it trying to switch to Atuin.
 
 ## Contributing
 
