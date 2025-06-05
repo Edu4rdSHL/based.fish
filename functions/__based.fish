@@ -44,10 +44,12 @@ function __based
     else
         set -f results (sqlite3 -batch $db "
         SELECT DISTINCT cmd FROM (
-            -- Get the most recent command across all paths
+            -- Get the most recent command across the current path to emulate the normal history behavior
+            -- This ensures that the most recent command is always at the top
             SELECT cmd, max_ts, counter, priority FROM (
                 SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 0 as priority
                 FROM log
+                WHERE path = '$path'
                 GROUP BY cmd
                 ORDER BY max_ts DESC
                 LIMIT 1
