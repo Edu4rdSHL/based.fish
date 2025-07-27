@@ -68,17 +68,31 @@ $ based stats
 ```
 This will display statistics about your command usage, such as the most frequently used commands, options, and arguments.
 
+For database maintenance (recommended to run if you notice performance issues):
+
+```fish
+$ based maintenance
+```
+This will optimize the database by running VACUUM and ANALYZE operations to keep it performing well.
+
 ## Configuration
 
 You can customize the behavior of based.fish by setting environment variables in your Fish shell:
 
 - `BASED_NO_CONFIRMATION`: If set to `1`, automatically executes the selected suggestion without confirmation, otherwise, it requires another Enter key press to execute the suggestion.
 - `BASED_NO_FUZZY`: If set to `1`, disables fuzzy matching for completions and only commands that start with the typed prefix will be suggested.
+- `BASED_EXCLUDED_PATHS`: A list of path patterns to exclude from history logging. Supports glob patterns like `*` and `?`. Useful for excluding temporary directories, sensitive locations, or paths where you don't want command history tracked.
 
 E.g. to disable fuzzy behavior when searching for completions
 
 ```fish
 $ set -Ux BASED_NO_FUZZY 1
+```
+
+E.g. to exclude specific paths from history tracking
+
+```fish
+$ set -Ux BASED_EXCLUDED_PATHS "/tmp/*" "/var/tmp/*" "$HOME/Downloads"
 ```
 
 The keybindings for the completions are as follows:
