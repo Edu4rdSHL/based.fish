@@ -13,6 +13,15 @@ function __based_log --on-event fish_preexec
         return
     end
 
+    # Check if path should be excluded
+    if set -q BASED_EXCLUDED_PATHS
+        for excluded_pattern in $BASED_EXCLUDED_PATHS
+            if string match -q $excluded_pattern $path
+                return
+            end
+        end
+    end
+
     set cmd (string replace -a "'" "''" -- $cmd)
     set path (string replace -a "'" "''" -- $path)
 
