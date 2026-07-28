@@ -10,7 +10,7 @@ function based
             __based_reset_state
         case maintenance vacuum
             __based_maintenance
-        case help '*'
+        case help ''
             echo "Usage: based init|import|stats|reset|maintenance|help"
             echo "Commands:"
             echo "  init        - Initialize the Based database"
