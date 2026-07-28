@@ -1,7 +1,11 @@
 function __based_log --on-event fish_preexec
     set -l db ~/.local/share/fish/based/based.db
     if not test -f $db
-        echo "Database for the Based plugin not found. Please run based init to initialize it."
+        # Runs before every command, so warn once per session instead of on each one.
+        if not set -q __based_db_missing_warned
+            set -g __based_db_missing_warned 1
+            echo "Database for the Based plugin not found. Please run based init to initialize it."
+        end
         return
     end
 
