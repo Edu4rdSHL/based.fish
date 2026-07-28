@@ -7,8 +7,8 @@ function __based_fzf_popup
         --bind "tab:accept" \
         --expect tab,enter)
 
-    set -l key (echo $out[1])
-    set -l chosen (string join "\n" $out[2..-1] | string collect)
+    set -l key $out[1]
+    set -l chosen (string join \n $out[2..-1] | string collect)
 
     if test -n "$chosen"
         commandline -r -- "$chosen"
