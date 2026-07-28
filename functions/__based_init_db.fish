@@ -15,11 +15,9 @@ function __based_init_db
             ts INTEGER NOT NULL,
             PRIMARY KEY (path, cmd)
         );
-        CREATE INDEX IF NOT EXISTS idx_log_cmd ON log(cmd);
-        CREATE INDEX IF NOT EXISTS idx_log_path_ts ON log(path, ts);
-        CREATE INDEX IF NOT EXISTS idx_log_counter_ts ON log(counter DESC, ts DESC);
-        CREATE INDEX IF NOT EXISTS idx_log_cmd_like ON log(cmd COLLATE NOCASE);
     "
+
+    __based_ensure_indexes $db_path
 
     echo "Based initialized. You can also import your fish history with 'based import'."
 end
