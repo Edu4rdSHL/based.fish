@@ -5,7 +5,7 @@ function __based_log --on-event fish_preexec
         return
     end
 
-    set -l path (realpath (pwd))
+    set -l path (pwd -P)
     set -l cmd (string trim -- (string join " " $argv))
     set -l ts (date +%s)
 

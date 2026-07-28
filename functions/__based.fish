@@ -4,7 +4,7 @@ function __based
         return
     end
 
-    set -l path (realpath (pwd))
+    set -l path (pwd -P)
     set -l buffer (commandline --current-buffer)
     set -l cursor_pos (commandline -C)
     set -l prefix (string sub -l $cursor_pos -- "$buffer")
