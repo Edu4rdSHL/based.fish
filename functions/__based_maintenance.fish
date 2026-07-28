@@ -10,6 +10,9 @@ function __based_maintenance
     # Get database size before
     set -l size_before (du -h $db | cut -f1)
 
+    # Duplicated the PRIMARY KEY (path, cmd) index; drop it on older databases.
+    sqlite3 $db "DROP INDEX IF EXISTS idx_log_path_cmd;"
+
     # Vacuum the database
     sqlite3 $db "VACUUM;"
 
