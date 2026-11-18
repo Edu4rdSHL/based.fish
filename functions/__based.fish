@@ -1,13 +1,21 @@
 function __based
+    # The inline mode matches the whole buffer and keeps only the top rows.
+    argparse prefix= limit= -- $argv
+    or return
+    set -q _flag_limit; or set _flag_limit -1
+
     set -l db ~/.local/share/fish/based/based.db
     if not test -f $db
         return
     end
 
     set -l path (pwd -P)
-    set -l buffer (commandline --current-buffer)
-    set -l cursor_pos (commandline -C)
-    set -l prefix (string sub -l $cursor_pos -- "$buffer")
+
+    set -l prefix $_flag_prefix
+    if not set -q _flag_prefix
+        set -l buffer (commandline --current-buffer)
+        set prefix (string sub -l (commandline -C) -- "$buffer")
+    end
 
     set path (string replace -a "'" "''" -- $path)
     # % and _ are LIKE wildcards, the typed text has to match literally
@@ -41,7 +49,7 @@ function __based
               )
             GROUP BY cmd
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC;"
+        ORDER BY priority ASC, counter DESC, max_ts DESC LIMIT $_flag_limit;"
     else
         sqlite3 -batch $db "
         SELECT DISTINCT cmd FROM (
@@ -77,6 +85,6 @@ function __based
               )
             GROUP BY cmd
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC;"
+        ORDER BY priority ASC, counter DESC, max_ts DESC LIMIT $_flag_limit;"
     end
 end

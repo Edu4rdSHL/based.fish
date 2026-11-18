@@ -82,6 +82,7 @@ You can customize the behavior of based.fish by setting environment variables in
 - `BASED_NO_CONFIRMATION`: If set to `1`, automatically executes the selected suggestion without confirmation, otherwise, it requires another Enter key press to execute the suggestion.
 - `BASED_NO_FUZZY`: If set to `1`, disables fuzzy matching for completions and only commands that start with the typed prefix will be suggested.
 - `BASED_EXCLUDED_PATHS`: A list of path patterns to exclude from history logging. Supports glob patterns like `*` and `?`. Useful for excluding temporary directories, sensitive locations, or paths where you don't want command history tracked.
+- `BASED_INLINE_MODE`: If set to `1`, `Arrow Up` cycles through the suggestions on the command line itself instead of opening the fzf popup, and `Arrow Down` steps back until the text you typed is restored. The whole command line is used as the filter, and suggestions come from the current directory first and then from the imported fish history. `Arrow Up` stops at the last suggestion. When nothing matches, when the command line has several lines, while fish's own history search is active, or when `Arrow Down` reaches your own text, the arrows keep their default fish behavior. `BASED_NO_CONFIRMATION` does not apply, since `Enter` runs whatever is on the command line.
 
 E.g. to disable fuzzy behavior when searching for completions
 

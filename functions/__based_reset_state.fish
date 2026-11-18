@@ -4,5 +4,6 @@ function __based_reset_state
     set -e BASED_NO_CONFIRMATION
     set -e BASED_NO_FUZZY
     set -e BASED_EXCLUDED_PATHS
+    set -e BASED_INLINE_MODE
     echo "Based state has been reset."
 end

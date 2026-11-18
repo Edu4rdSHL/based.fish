@@ -24,6 +24,7 @@ function based
             echo "  BASED_NO_CONFIRMATION - Skip confirmation prompts"
             echo "  BASED_NO_FUZZY        - Disable fuzzy matching"
             echo "  BASED_EXCLUDED_PATHS  - Paths to exclude from history (glob patterns)"
+            echo "  BASED_INLINE_MODE     - Cycle suggestions on the command line instead of the fzf popup"
         case '*'
             echo "Unknown command: $argv[1]"
             echo "Use 'based help' for usage information."
