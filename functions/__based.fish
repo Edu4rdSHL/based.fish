@@ -20,7 +20,7 @@ function __based
 
     # Build combined result set in SQL
     if test -n "$prefix"
-        set -f results (sqlite3 -batch $db "
+        sqlite3 -batch $db "
         SELECT DISTINCT cmd FROM (
             -- Prioritize commands in the current path, matching the prefix
             SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 0 as priority
@@ -41,9 +41,9 @@ function __based
               )
             GROUP BY cmd
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC;")
+        ORDER BY priority ASC, counter DESC, max_ts DESC;"
     else
-        set -f results (sqlite3 -batch $db "
+        sqlite3 -batch $db "
         SELECT DISTINCT cmd FROM (
             -- Get the most recent command across the current path to emulate the normal history behavior
             -- This ensures that the most recent command is always at the top
@@ -77,8 +77,6 @@ function __based
               )
             GROUP BY cmd
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC;")
+        ORDER BY priority ASC, counter DESC, max_ts DESC;"
     end
-
-    printf "%s\n" $results
 end
