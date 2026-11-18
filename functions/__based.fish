@@ -10,11 +10,12 @@ function __based
     set -l prefix (string sub -l $cursor_pos -- "$buffer")
 
     set path (string replace -a "'" "''" -- $path)
-    set prefix (string replace -a "'" "''" -- $prefix)
+    # % and _ are LIKE wildcards, the typed text has to match literally
+    set -l pattern (string replace -ra -- '[\\\\%_]' '\\\\$0' "$prefix" | string replace -a "'" "''")
 
-    set -l cmd_expr "%$prefix%"
+    set -l match "cmd LIKE '%$pattern%' ESCAPE '\\'"
     if set -q BASED_NO_FUZZY
-        set cmd_expr "$prefix%"
+        set match "cmd LIKE '$pattern%' ESCAPE '\\'"
     end
 
     # Build combined result set in SQL
@@ -24,7 +25,7 @@ function __based
             -- Prioritize commands in the current path, matching the prefix
             SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 0 as priority
             FROM log
-            WHERE path = '$path' AND cmd LIKE '$cmd_expr'
+            WHERE path = '$path' AND $match
             GROUP BY cmd
 
             UNION
@@ -32,11 +33,11 @@ function __based
             -- Append the commands from the imported fish history that match the prefix
             SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 1 as priority
             FROM log
-            WHERE path = 'fish_history' AND cmd LIKE '$cmd_expr'
+            WHERE path = 'fish_history' AND $match
               AND cmd NOT IN (
                   SELECT cmd
                   FROM log
-                  WHERE path = '$path' AND cmd LIKE '$cmd_expr'
+                  WHERE path = '$path' AND $match
               )
             GROUP BY cmd
         )
