@@ -42,6 +42,7 @@ $ fisher install Edu4rdSHL/based.fish
 
 ## Requirements
 
+- fish 4.0 or newer: older versions read `bind up` as the two keys `u` and `p`.
 - fzf: for selection of completions.
 - sqlite3: for storing and querying command history.
 
