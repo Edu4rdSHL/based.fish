@@ -11,7 +11,6 @@ function __based_log --on-event fish_preexec
 
     set -l path (pwd -P)
     set -l cmd (string trim -- (string join " " $argv))
-    set -l ts (date +%s)
 
     if test -z "$cmd"
         return
@@ -29,11 +28,13 @@ function __based_log --on-event fish_preexec
     set cmd (string replace -a "'" "''" -- $cmd)
     set path (string replace -a "'" "''" -- $path)
 
-    sqlite3 -batch $db "
+    # Detached through sh: the commit waits for an fsync that would delay every command,
+    # and a fish background job would take over the user's $last_pid.
+    sh -c 'sqlite3 -batch -cmd ".timeout 30000" "$1" "$2" </dev/null >/dev/null 2>&1 &' sh $db "
         INSERT INTO log (path, cmd, counter, ts)
-        VALUES ('$path', '$cmd', 1, $ts)
+        VALUES ('$path', '$cmd', 1, strftime('%s', 'now'))
         ON CONFLICT(path, cmd) DO UPDATE SET
             counter = counter + 1,
-            ts = $ts;
+            ts = excluded.ts;
     "
 end
