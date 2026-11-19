@@ -22,7 +22,7 @@ function __based
     set -l pattern (string replace -ra -- '[\\\\%_]' '\\\\$0' "$prefix" | string replace -a "'" "''")
 
     set -l match "cmd LIKE '%$pattern%' ESCAPE '\\'"
-    if set -q BASED_NO_FUZZY
+    if set -q BASED_NO_FUZZY; and test "$BASED_NO_FUZZY" != 0
         set match "cmd LIKE '$pattern%' ESCAPE '\\'"
     end
 
