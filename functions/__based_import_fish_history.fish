@@ -37,7 +37,13 @@ function __based_import_fish_history
         switch $line
             case '- cmd:*'
                 set cmd (string replace -r '^- cmd: *' '' -- $line | string trim)
-                set cmd (string replace -a "'" "''" -- $cmd)
+                # fish writes a newline as \n and a backslash as \\, and a multi-line command
+                # cannot round-trip through the line-based suggestions
+                if string match -qr '^(?:[^\\\\]|\\\\.)*\\\\n' -- $cmd
+                    set cmd ""
+                else
+                    set cmd (string replace -a '\\\\' '\\' -- $cmd | string replace -a "'" "''")
+                end
             case '  when:*'
                 set when (string replace -r '^  when: *' '' -- $line | string trim)
 

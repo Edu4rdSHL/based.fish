@@ -17,6 +17,9 @@ function __based_log --on-event fish_preexec
         return
     end
 
+    # Suggestions are read back one per line, so a multi-line command cannot round-trip
+    string match -qr '\n' -- "$argv"; and return
+
     set -l path (pwd -P)
     set -l cmd (string trim -- (string join " " $argv))
 
