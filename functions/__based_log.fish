@@ -41,7 +41,7 @@ function __based_log --on-event fish_preexec
 
     # Detached through sh: the commit waits for an fsync that would delay every command,
     # and a fish background job would take over the user's $last_pid.
-    sh -c 'sqlite3 -batch -cmd ".timeout 30000" "$1" "$2" </dev/null >/dev/null 2>&1 &' sh $db "
+    sh -c 'sqlite3 -batch -init /dev/null -cmd ".timeout 30000" "$1" "$2" </dev/null >/dev/null 2>&1 &' sh $db "
         INSERT INTO log (path, cmd, counter, ts)
         VALUES ('$path', '$cmd', 1, strftime('%s', 'now'))
         ON CONFLICT(path, cmd) DO UPDATE SET

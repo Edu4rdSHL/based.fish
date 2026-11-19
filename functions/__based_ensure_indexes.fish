@@ -3,7 +3,7 @@
 function __based_ensure_indexes
     set -l db $argv[1]
 
-    sqlite3 -batch -cmd ".timeout 5000" $db "
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "
         -- Prefix matches with BASED_NO_FUZZY (LIKE is case-insensitive, hence NOCASE)
         CREATE INDEX IF NOT EXISTS idx_log_cmd_like ON log(cmd COLLATE NOCASE);
         -- Covers the per-directory suggestion queries, already in their final order

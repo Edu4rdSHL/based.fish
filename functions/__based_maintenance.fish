@@ -14,10 +14,10 @@ function __based_maintenance
     __based_ensure_indexes $db
 
     # Vacuum the database
-    sqlite3 -cmd ".timeout 5000" $db "VACUUM;"
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "VACUUM;"
 
     # Update statistics
-    sqlite3 -cmd ".timeout 5000" $db "ANALYZE;"
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "ANALYZE;"
 
     # Get database size after
     set -l size_after (du -h $db | cut -f1)

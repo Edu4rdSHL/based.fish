@@ -29,7 +29,7 @@ function __based
     # (path, cmd) is the primary key, so every row is already a distinct command and the
     # branches never overlap. cmd breaks ties so the order is stable.
     if test -n "$prefix"
-        sqlite3 -batch -cmd ".timeout 200" $db "
+        sqlite3 -batch -init /dev/null -cmd ".timeout 200" $db "
         SELECT cmd FROM (
             SELECT cmd, counter, ts, 0 AS priority FROM log
             WHERE path = '$path' AND $match
@@ -41,7 +41,7 @@ function __based
         ORDER BY priority, counter DESC, ts DESC, cmd LIMIT $_flag_limit;"
     else
         # The most recent command of this directory goes first, like plain history
-        sqlite3 -batch -cmd ".timeout 200" $db "
+        sqlite3 -batch -init /dev/null -cmd ".timeout 200" $db "
         SELECT cmd FROM (
             SELECT cmd, counter, ts,
                    cmd IS NOT (SELECT cmd FROM log WHERE path = '$path' ORDER BY ts DESC, cmd LIMIT 1) AS priority

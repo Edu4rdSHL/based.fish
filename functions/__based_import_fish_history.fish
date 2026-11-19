@@ -13,7 +13,7 @@ function __based_import_fish_history
         return 1
     end
 
-    set -l existing_count (sqlite3 -cmd ".timeout 5000" $db "SELECT COUNT(*) FROM log WHERE path = '$path';")
+    set -l existing_count (sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "SELECT COUNT(*) FROM log WHERE path = '$path';")
 
     if test $existing_count -gt 0
         echo "Fish history was already imported under context: '$path'. Total commands already imported: $existing_count"
@@ -60,8 +60,8 @@ function __based_import_fish_history
     end <$history_file
 
     echo "COMMIT;" >>$temp_sql
-    sqlite3 -cmd ".timeout 5000" $db <$temp_sql
-    set -l total_inserts (sqlite3 -cmd ".timeout 5000" $db "SELECT COUNT(*) FROM log WHERE path = '$path';")
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db <$temp_sql
+    set -l total_inserts (sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "SELECT COUNT(*) FROM log WHERE path = '$path';")
     rm -f $temp_sql
 
     echo "Fish history imported into Based under context: '$path'. Total commands processed: $total_inserts"

@@ -7,7 +7,7 @@ function __based_init_db
 
     mkdir -p (dirname $db_path)
 
-    sqlite3 -batch -cmd ".timeout 5000" $db_path "
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db_path "
         CREATE TABLE IF NOT EXISTS log (
             path TEXT NOT NULL,
             cmd TEXT NOT NULL,
