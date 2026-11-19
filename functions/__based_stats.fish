@@ -23,12 +23,20 @@ function __based_stats
 
     echo
     echo "== Top 5 Paths =="
-    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "
-        SELECT printf('%4d x  %s', SUM(counter), path)
+    set -l shown 0
+    sqlite3 -batch -init /dev/null -cmd ".timeout 5000" -separator \t $db "
+        SELECT SUM(counter), path
         FROM log
         WHERE path != 'fish_history'
         GROUP BY path
-        ORDER BY SUM(counter) DESC
-        LIMIT 5;
-    "
+        ORDER BY SUM(counter) DESC;
+    " | while read -l -d \t count path
+        switch $path
+            case $BASED_STATS_HIDDEN_PATHS
+                continue
+        end
+        printf '%4d x  %s\n' $count $path
+        set shown (math $shown + 1)
+        test $shown -lt 5; or break
+    end
 end
