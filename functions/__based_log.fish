@@ -1,4 +1,12 @@
 function __based_log --on-event fish_preexec
+    # The same rules fish applies to its own history
+    test -n "$fish_private_mode"; and return
+    if functions -q fish_should_add_to_history
+        fish_should_add_to_history $argv; or return
+    else if string match -q ' *' -- "$argv"
+        return
+    end
+
     set -l db ~/.local/share/fish/based/based.db
     if not test -f $db
         # Runs before every command, so warn once per session instead of on each one.
