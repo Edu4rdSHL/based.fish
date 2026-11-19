@@ -26,65 +26,32 @@ function __based
         set match "cmd LIKE '$pattern%' ESCAPE '\\'"
     end
 
-    # Build combined result set in SQL
+    # (path, cmd) is the primary key, so every row is already a distinct command and the
+    # branches never overlap. cmd breaks ties so the order is stable.
     if test -n "$prefix"
         sqlite3 -batch $db "
-        SELECT DISTINCT cmd FROM (
-            -- Prioritize commands in the current path, matching the prefix
-            SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 0 as priority
-            FROM log
+        SELECT cmd FROM (
+            SELECT cmd, counter, ts, 0 AS priority FROM log
             WHERE path = '$path' AND $match
-            GROUP BY cmd
-
-            UNION
-
-            -- Append the commands from the imported fish history that match the prefix
-            SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 1 as priority
-            FROM log
+            UNION ALL
+            SELECT cmd, counter, ts, 1 FROM log AS h
             WHERE path = 'fish_history' AND $match
-              AND cmd NOT IN (
-                  SELECT cmd
-                  FROM log
-                  WHERE path = '$path' AND $match
-              )
-            GROUP BY cmd
+              AND NOT EXISTS (SELECT 1 FROM log WHERE path = '$path' AND cmd = h.cmd)
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC LIMIT $_flag_limit;"
+        ORDER BY priority, counter DESC, ts DESC, cmd LIMIT $_flag_limit;"
     else
+        # The most recent command of this directory goes first, like plain history
         sqlite3 -batch $db "
-        SELECT DISTINCT cmd FROM (
-            -- Get the most recent command across the current path to emulate the normal history behavior
-            -- This ensures that the most recent command is always at the top
-            SELECT cmd, max_ts, counter, priority FROM (
-                SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 0 as priority
-                FROM log
-                WHERE path = '$path'
-                GROUP BY cmd
-                ORDER BY max_ts DESC
-                LIMIT 1
-            )
-
-            UNION
-
-            -- Commands in the current context
-            SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 1 as priority
+        SELECT cmd FROM (
+            SELECT cmd, counter, ts,
+                   cmd IS NOT (SELECT cmd FROM log WHERE path = '$path' ORDER BY ts DESC, cmd LIMIT 1) AS priority
             FROM log
             WHERE path = '$path'
-            GROUP BY cmd
-
-            UNION
-
-            -- Commands in the imported fish history
-            SELECT cmd, MAX(ts) as max_ts, MAX(counter) as counter, 2 as priority
-            FROM log
+            UNION ALL
+            SELECT cmd, counter, ts, 2 FROM log AS h
             WHERE path = 'fish_history'
-              AND cmd NOT IN (
-                  SELECT cmd
-                  FROM log
-                  WHERE path = '$path'
-              )
-            GROUP BY cmd
+              AND NOT EXISTS (SELECT 1 FROM log WHERE path = '$path' AND cmd = h.cmd)
         )
-        ORDER BY priority ASC, counter DESC, max_ts DESC LIMIT $_flag_limit;"
+        ORDER BY priority, counter DESC, ts DESC, cmd LIMIT $_flag_limit;"
     end
 end
