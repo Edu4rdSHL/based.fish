@@ -29,7 +29,7 @@ based.fish uses a SQLite database to store command history and statistics. It an
 
 - It considers the date of the last use, the frequency of use, and the context of the current command line input. Suggestions are made based on this information.
 - If you are in a directory where you have previously used a command multiple times, it will suggest that command first, then the second most used command, and so on.
-- For convenience, during the current session, it will always suggest your previous command first and then append the most used commands in the current directory, and then then global ones. It's to replicate the "normal" behavior of most shells.
+- For convenience, during the current session, it will always suggest your previous command first and then append the most used commands in the current directory, and then the ones from the imported fish history. It's to replicate the "normal" behavior of most shells.
 
 
 ## Installation
@@ -88,13 +88,13 @@ You can customize the behavior of based.fish by setting environment variables in
 E.g. to disable fuzzy behavior when searching for completions
 
 ```fish
-$ set -Ux BASED_NO_FUZZY 1
+$ set -U BASED_NO_FUZZY 1
 ```
 
 E.g. to exclude specific paths from history tracking
 
 ```fish
-$ set -Ux BASED_EXCLUDED_PATHS "/tmp/*" "/var/tmp/*" "$HOME/Downloads"
+$ set -U BASED_EXCLUDED_PATHS "/tmp/*" "/var/tmp/*" "$HOME/Downloads"
 ```
 
 The keybindings for the completions are as follows:
