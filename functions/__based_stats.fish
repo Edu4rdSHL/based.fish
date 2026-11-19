@@ -6,14 +6,14 @@ function __based_stats
     end
 
     echo "== Based Stats =="
-    sqlite3 $db "
+    sqlite3 -cmd ".timeout 5000" $db "
         SELECT 'Total unique commands:', COUNT(DISTINCT cmd) FROM log;
         SELECT 'Total executions:', SUM(counter) FROM log;
     "
 
     echo
     echo "== Top 10 Commands =="
-    sqlite3 $db "
+    sqlite3 -cmd ".timeout 5000" $db "
         SELECT printf('%4d ×  %s', SUM(counter), cmd)
         FROM log
         GROUP BY cmd
@@ -23,7 +23,7 @@ function __based_stats
 
     echo
     echo "== Top 5 Paths =="
-    sqlite3 $db "
+    sqlite3 -cmd ".timeout 5000" $db "
         SELECT printf('%4d ×  %s', SUM(counter), path)
         FROM log
         WHERE path != 'fish_history'
