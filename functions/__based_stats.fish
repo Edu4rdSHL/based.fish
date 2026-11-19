@@ -14,7 +14,7 @@ function __based_stats
     echo
     echo "== Top 10 Commands =="
     sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "
-        SELECT printf('%4d ×  %s', SUM(counter), cmd)
+        SELECT printf('%4d x  %s', SUM(counter), cmd)
         FROM log
         GROUP BY cmd
         ORDER BY SUM(counter) DESC, MAX(ts) DESC
@@ -24,7 +24,7 @@ function __based_stats
     echo
     echo "== Top 5 Paths =="
     sqlite3 -batch -init /dev/null -cmd ".timeout 5000" $db "
-        SELECT printf('%4d ×  %s', SUM(counter), path)
+        SELECT printf('%4d x  %s', SUM(counter), path)
         FROM log
         WHERE path != 'fish_history'
         GROUP BY path
