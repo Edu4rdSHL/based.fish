@@ -16,6 +16,8 @@ function __based_fzf_popup
 
     if test -n "$chosen"
         commandline -r -- "$chosen"
+        # Otherwise fish appends its own suggestion, and the line no longer shows what Enter runs
+        commandline -f suppress-autosuggestion
 
         # Only execute if the user pressed ENTER and confirmation is set
         if test "$key" = enter; and set -q BASED_NO_CONFIRMATION; and test "$BASED_NO_CONFIRMATION" != 0
