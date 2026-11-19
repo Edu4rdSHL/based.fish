@@ -103,7 +103,18 @@ The keybindings for the completions are as follows:
 - `Enter`: Accept the selected suggestion.
 - `Ctrl + C`: Cancel the completion and return to the command line.
 
-The arrows are bound when the plugin loads, in the default mode and in vi insert mode. To change them, add your own `bind` commands to `config.fish`, which runs after the plugin, e.g. `bind ctrl-p '__based_or_history up'`.
+The arrows are bound when the plugin loads, in the default mode and in vi insert mode. To change them, add your own `bind` commands to `config.fish`, which runs after the plugin.
+
+E.g. to keep the default fish behavior on `Arrow Up` and `Arrow Down` and use based.fish with `Shift + Arrow Up` and `Shift + Arrow Down`
+
+```fish
+bind -e up down
+bind -M insert -e up down
+for mode in default insert
+    bind -M $mode shift-up '__based_or_history up'
+    bind -M $mode shift-down '__based_or_history down'
+end
+```
 
 ## Demonstration
 
