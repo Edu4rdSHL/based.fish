@@ -102,7 +102,7 @@ The keybindings for the completions are as follows:
 - `Enter`: Accept the selected suggestion.
 - `Ctrl + C`: Cancel the completion and return to the command line.
 
-Keybinds can be customized by modifying the `$HOME/.config/fish/functions/based_user_key_bindings.fish` file.
+The arrows are bound when the plugin loads, in the default mode and in vi insert mode. To change them, add your own `bind` commands to `config.fish`, which runs after the plugin, e.g. `bind ctrl-p '__based_or_history up'`.
 
 ## Demonstration
 
